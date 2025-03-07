@@ -12,10 +12,7 @@ struct HomePage: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Quote Generator App!!")
         }
         .padding()
     }
