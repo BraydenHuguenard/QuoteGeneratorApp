@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct Quote_Generator_AppApp: App {
+struct Quote_Generator_App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomePage()
         }
     }
 }
