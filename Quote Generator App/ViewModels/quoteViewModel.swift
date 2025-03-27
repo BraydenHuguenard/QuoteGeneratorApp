@@ -8,10 +8,10 @@
 import Foundation
 
 struct QuoteGenerator: Identifiable {
-    var id = UUID() // Unique identifier for each quote
+    var id = UUID()
     var quote: String
     var artist: String
-    var image: String? // Optional image URL for quotes that may not have an image
+    var image: String?
     
     // Initializer to create a Quote
     init(quote: String, artist: String, image: String? = nil) {
