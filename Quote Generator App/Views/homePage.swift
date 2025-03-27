@@ -15,9 +15,6 @@ struct HomePage: View {
     @AppStorage("savedQuotes") private var savedQuotesData: String = ""
     
     @State private var savedQuotes: [String] = []
-    
-
-    let apiKey = "your_key" // Replace with actual API key
 
     let categories = [
         "Random": "random",
@@ -39,9 +36,9 @@ struct HomePage: View {
                 return
             }
 
-            urlString = "https://zenquotes.io/api/quotes/author/\(formattedAuthorName)/\(apiKey)"
+            urlString = "https://zenquotes.io/api/quotes/author/\(formattedAuthorName)/"
         } else {
-            urlString = "https://zenquotes.io/api/\(categoryEndpoint)/\(apiKey)"
+            urlString = "https://zenquotes.io/api/\(categoryEndpoint)/"
         }
 
         guard let url = URL(string: urlString) else {
