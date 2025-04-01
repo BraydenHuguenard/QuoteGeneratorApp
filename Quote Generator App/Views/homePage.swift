@@ -15,7 +15,8 @@ struct HomePage: View {
     let categories = [
         "Random": "random",
         "Daily": "today",
-        "Author": "author"
+        "Author": "author",
+        "Image" : "image"
     ]
     
     var body: some View {
