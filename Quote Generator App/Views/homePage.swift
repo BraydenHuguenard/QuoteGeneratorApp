@@ -9,7 +9,6 @@ import SwiftUI
 struct HomePage: View {
     @State private var selectedCategory = "Random"
     @State private var authorName = ""
-    
     @ObservedObject var quoteVM: QuoteViewModel
     
     let categories = [
@@ -26,7 +25,9 @@ struct HomePage: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
+
                     HStack {
+                        // Two blue buttons on the left
                         NavigationLink(destination: SavedImagesView()) {
                             Image(systemName: "photo.on.rectangle")
                                 .resizable()
@@ -38,7 +39,9 @@ struct HomePage: View {
                                 .clipShape(Circle())
                         }
                         
+
                         NavigationLink(destination: SavedQuotesView(savedQuotes: quoteVM.savedQuotes)) {
+
                             Image(systemName: "quote.bubble")
                                 .resizable()
                                 .scaledToFit()
@@ -48,15 +51,32 @@ struct HomePage: View {
                                 .foregroundColor(.white)
                                 .clipShape(Circle())
                         }
+                        
+                        Spacer()
+                        
+                        // Star button on the right
+                        Button(action: saveQuote) {
+                            Image(systemName: "star.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .padding()
+                                .background(Circle().fill(Color.yellow))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                        }
                     }
+                    .padding(.horizontal)
                     .padding(.top, 10)
                     
-                    Text("Welcome to the Quote Generator App!")
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
-                        .foregroundColor(.primary)
+                    Spacer()
+                    
+                   
+                    Text(quote)
+                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .padding()
                         .multilineTextAlignment(.center)
-                        .padding(.top, 10)
-                        .padding(.horizontal, 20)
+                        .frame(maxWidth: .infinity, alignment: .center)
                     
                     Spacer()
                     
@@ -74,6 +94,7 @@ struct HomePage: View {
                             .padding()
                     }
                     
+                    // Button to fetch a quote or image
                     Button("Get Quote") {
                         if selectedCategory == "Random" {
                             quoteVM.getQuoteRandom()
@@ -110,7 +131,6 @@ struct HomePage: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
-                    
                     Spacer()
                 }
             }
