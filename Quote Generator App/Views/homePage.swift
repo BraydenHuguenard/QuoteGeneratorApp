@@ -55,7 +55,7 @@ struct HomePage: View {
                         Spacer()
                         
                         // Star button on the right
-                        Button(action: saveQuote) {
+                        Button(action: quoteVM.saveQuote) {
                             Image(systemName: "star.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -72,7 +72,7 @@ struct HomePage: View {
                     Spacer()
                     
                    
-                    Text(quote)
+                    Text(quoteVM.currentQuote)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                         .padding()
                         .multilineTextAlignment(.center)
