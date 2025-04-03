@@ -63,13 +63,23 @@ struct HomePage: View {
                     .padding(.top, 10)
                     
                     Spacer()
+                    Spacer()
+                        
+                    if quoteVM.currentQuote.isEmpty {
+                        Text("Click the button to get a quote!")
+                            .font(.system(size: 24, weight: .medium, design: .rounded))
+                            .padding()
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    } else {
+                        Text(quoteVM.currentQuote)
+                            .font(.system(size: 24, weight: .medium, design: .rounded))
+                            .padding()
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
                     
-                    Text(quoteVM.currentQuote)
-                        .font(.system(size: 24, weight: .medium, design: .rounded))
-                        .padding()
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
+                    Spacer()
                     Spacer()
                     
                     Picker("Select a Quote Category", selection: $selectedCategory) {
@@ -94,26 +104,6 @@ struct HomePage: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     
-                    if quoteVM.currentQuote.isEmpty {
-                        Text("Click the button to get a quote!")
-                            .padding()
-                            .multilineTextAlignment(.center)
-                    } else {
-                        Text(quoteVM.currentQuote)
-                            .padding()
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    Button(action: quoteVM.saveQuote) {
-                        HStack {
-                            Image(systemName: "bookmark.fill")
-                            Text("Save Quote")
-                        }
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
                     Spacer()
                 }
             }
