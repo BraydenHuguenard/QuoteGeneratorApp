@@ -10,19 +10,17 @@ struct HomePage: View {
     @State private var quote = "Click the button to get a quote!"
     @State private var selectedCategory = "Random"
     @State private var authorName = ""
-
-    // Store saved quotes as JSON in UserDefaults
-    @AppStorage("savedQuotes") private var savedQuotesData: String = ""
     
+    @AppStorage("savedQuotes") private var savedQuotesData: String = ""
     @State private var savedQuotes: [String] = []
     
-
-    let apiKey = "your_key" // Replace with actual API key
+    let apiKey = "your_key"
 
     let categories = [
         "Random": "random",
         "Daily": "today",
-        "Author": "author"
+        "Author": "author",
+        "Image": "image",
     ]
 
     func fetchQuote() {
@@ -33,13 +31,14 @@ struct HomePage: View {
         if categoryEndpoint == "author" {
             let formattedAuthorName = authorName.trimmingCharacters(in: .whitespacesAndNewlines)
                 .replacingOccurrences(of: " ", with: "_")
-
             guard !formattedAuthorName.isEmpty else {
                 quote = "Please enter an author's name."
                 return
             }
-
             urlString = "https://zenquotes.io/api/quotes/author/\(formattedAuthorName)/\(apiKey)"
+        } else if categoryEndpoint == "image" {
+            
+            urlString = "https://zenquotes.io/api/image/"
         } else {
             urlString = "https://zenquotes.io/api/\(categoryEndpoint)/\(apiKey)"
         }
@@ -64,6 +63,7 @@ struct HomePage: View {
         }.resume()
     }
 
+    
     func saveQuote() {
         if !savedQuotes.contains(quote) {
             savedQuotes.append(quote)
@@ -90,10 +90,11 @@ struct HomePage: View {
             ZStack {
                 Color.blue.opacity(0.2)
                     .edgesIgnoringSafeArea(.all)
-
+                
                 VStack {
-                    // Top Navigation Buttons
+                    
                     HStack {
+                        // Two blue buttons on the left
                         NavigationLink(destination: SavedImagesView()) {
                             Image(systemName: "photo.on.rectangle")
                                 .resizable()
@@ -104,7 +105,7 @@ struct HomePage: View {
                                 .foregroundColor(.white)
                                 .clipShape(Circle())
                         }
-
+                        
                         NavigationLink(destination: SavedQuotesView(savedQuotes: savedQuotes)) {
                             Image(systemName: "quote.bubble")
                                 .resizable()
@@ -115,18 +116,36 @@ struct HomePage: View {
                                 .foregroundColor(.white)
                                 .clipShape(Circle())
                         }
+                        
+                        Spacer()
+                        
+                        // Star button on the right
+                        Button(action: saveQuote) {
+                            Image(systemName: "star.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .padding()
+                                .background(Circle().fill(Color.yellow))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                        }
                     }
+                    .padding(.horizontal)
                     .padding(.top, 10)
-
-                    Text("Welcome to the Quote Generator App!")
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
-                        .foregroundColor(.primary)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 10)
-                        .padding(.horizontal, 20)
-
+                    
                     Spacer()
-
+                    
+                   
+                    Text(quote)
+                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .padding()
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Spacer()
+                    
+                    
                     Picker("Select a Quote Category", selection: $selectedCategory) {
                         ForEach(categories.keys.sorted(), id: \.self) { key in
                             Text(key).tag(key)
@@ -134,13 +153,14 @@ struct HomePage: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
-
+                    
                     if selectedCategory == "Author" {
                         TextField("Enter author name", text: $authorName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding()
                     }
-
+                    
+                    // Button to fetch a quote or image
                     Button("Get Quote") {
                         fetchQuote()
                     }
@@ -148,32 +168,17 @@ struct HomePage: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-
-                    Text(quote)
-                        .padding()
-                        .multilineTextAlignment(.center)
-
-                    Button(action: saveQuote) {
-                        HStack {
-                            Image(systemName: "bookmark.fill")
-                            Text("Save Quote")
-                        }
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-
+                    
                     Spacer()
                 }
             }
             .navigationBarHidden(true)
-            .onAppear(perform: loadSavedQuotes) 
+            .onAppear(perform: loadSavedQuotes)
         }
     }
 }
 
-// Saved Quotes Page
+
 struct SavedQuotesView: View {
     let savedQuotes: [String]
 
@@ -191,7 +196,7 @@ struct SavedQuotesView: View {
     }
 }
 
-// Placeholder for Saved Images Page
+
 struct SavedImagesView: View {
     var body: some View {
         VStack {
@@ -203,7 +208,7 @@ struct SavedImagesView: View {
     }
 }
 
-// Preview
+
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
