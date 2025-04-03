@@ -8,13 +8,11 @@ import SwiftUI
 
 struct HomePage: View {
     @State private var selectedCategory = "Random"
-    @State private var authorName = ""
     @ObservedObject var quoteVM: QuoteViewModel
     
     let categories = [
         "Random": "random",
         "Daily": "today",
-        "Author": "author",
         "Image" : "image"
     ]
     
@@ -25,9 +23,7 @@ struct HomePage: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-
                     HStack {
-                        // Two blue buttons on the left
                         NavigationLink(destination: SavedImagesView()) {
                             Image(systemName: "photo.on.rectangle")
                                 .resizable()
@@ -39,9 +35,7 @@ struct HomePage: View {
                                 .clipShape(Circle())
                         }
                         
-
                         NavigationLink(destination: SavedQuotesView(savedQuotes: quoteVM.savedQuotes)) {
-
                             Image(systemName: "quote.bubble")
                                 .resizable()
                                 .scaledToFit()
@@ -54,7 +48,6 @@ struct HomePage: View {
                         
                         Spacer()
                         
-                        // Star button on the right
                         Button(action: quoteVM.saveQuote) {
                             Image(systemName: "star.fill")
                                 .resizable()
@@ -71,7 +64,6 @@ struct HomePage: View {
                     
                     Spacer()
                     
-                   
                     Text(quoteVM.currentQuote)
                         .font(.system(size: 24, weight: .medium, design: .rounded))
                         .padding()
@@ -81,25 +73,16 @@ struct HomePage: View {
                     Spacer()
                     
                     Picker("Select a Quote Category", selection: $selectedCategory) {
-                        ForEach(categories.keys.sorted(), id: \.self) { key in
+                        ForEach(categories.keys.sorted(), id: \..self) { key in
                             Text(key).tag(key)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .padding()
                     
-                    if selectedCategory == "Author" {
-                        TextField("Enter author name", text: $authorName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                    }
-                    
-                    // Button to fetch a quote or image
                     Button("Get Quote") {
                         if selectedCategory == "Random" {
                             quoteVM.getQuoteRandom()
-                        } else if selectedCategory == "Author" {
-                            quoteVM.getQuoteByArtist(authorName: authorName)
                         } else if selectedCategory == "Image" {
                             quoteVM.getQuoteByImage()
                         } else if selectedCategory == "Daily" {
@@ -111,7 +94,7 @@ struct HomePage: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     
-                    if quoteVM.currentQuote == "" {
+                    if quoteVM.currentQuote.isEmpty {
                         Text("Click the button to get a quote!")
                             .padding()
                             .multilineTextAlignment(.center)
@@ -138,7 +121,6 @@ struct HomePage: View {
         }
     }
     
-    // Saved Quotes Page
     struct SavedQuotesView: View {
         let savedQuotes: [QuoteGenerator]
         
@@ -148,7 +130,7 @@ struct HomePage: View {
                     .font(.title)
                     .padding()
                 
-                List(savedQuotes, id: \.id) { quote in
+                List(savedQuotes, id: \..id) { quote in
                     Text(quote.quote ?? "Unknown Quote")
                         .padding()
                 }
@@ -156,7 +138,6 @@ struct HomePage: View {
         }
     }
     
-    // Placeholder for Saved Images Page
     struct SavedImagesView: View {
         var body: some View {
             VStack {
@@ -168,10 +149,10 @@ struct HomePage: View {
         }
     }
     
-    // Preview
     struct HomePage_Previews: PreviewProvider {
         static var previews: some View {
             HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!", artist: "Author")))
         }
     }
 }
+
