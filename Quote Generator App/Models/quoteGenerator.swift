@@ -12,13 +12,15 @@ struct QuoteGenerator: Identifiable {
     var quote: String?
     var artist: String?
     var image: String?
+    var imageData: Data?
     var dateSaved: String
     
     // Initializer to create a Quote
-    init(quote: String? = nil, artist: String? = nil, image: String? = nil) {
+    init(quote: String? = nil, artist: String? = nil, image: String? = nil, imageData: Data? = nil) {
         self.quote = quote
         self.artist = artist
         self.image = image
+        self.imageData = imageData
         self.dateSaved = "April 9, 2025"
     }
     mutating func setdateSaved() {

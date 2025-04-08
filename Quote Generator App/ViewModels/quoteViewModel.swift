@@ -42,7 +42,32 @@ class QuoteViewModel: ObservableObject {
             }
         }.resume()
     }
-        
+    
+    func getQuoteByImage() {
+        guard let url = URL(string: "https://zenquotes.io/api/image/") else {
+            DispatchQueue.main.async {
+                self.currentQuote = "Invalid URL."
+            }
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data {
+                DispatchQueue.main.async {
+                    self.quote = QuoteGenerator(quote: nil, artist: nil, imageData: data)
+                    self.currentQuote = "" // Optional
+                    self.quoteHistory.append(self.quote)
+                    print("Image quote set!") // Debug: confirm this prints
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.currentQuote = "Failed to load image quote."
+                    print("Image quote failed.")
+                }
+            }
+        }.resume()
+    }
+    
     func getQuoteRandom() {
         fetchQuote(from: "https://zenquotes.io/api/random/")
     }
@@ -57,10 +82,6 @@ class QuoteViewModel: ObservableObject {
         }
         
         fetchQuote(from: "https://zenquotes.io/api/quotes/author/\(formattedAuthorName)/")
-    }
-        
-    func getQuoteByImage() {
-        fetchQuote(from: "https://zenquotes.io/api/image/")
     }
         
     func getDailyQuote() {
