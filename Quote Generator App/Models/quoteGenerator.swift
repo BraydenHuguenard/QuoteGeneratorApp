@@ -19,7 +19,7 @@ struct QuoteGenerator: Identifiable {
         self.quote = quote
         self.artist = artist
         self.image = image
-        self.dateSaved = "April 8, 2025"
+        self.dateSaved = "April 9, 2025"
     }
     mutating func setdateSaved() {
         self.dateSaved = getFormattedDate( )
