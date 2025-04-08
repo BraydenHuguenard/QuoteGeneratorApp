@@ -36,7 +36,7 @@ struct HomePage: View {
                                 .clipShape(Circle())
                         }
                         
-                        NavigationLink(destination: SavedQuotesView(savedQuotes: quoteVM.savedQuotes)) {
+                        NavigationLink(destination: SavedQuotesView(quoteVM: quoteVM)) {
                             Image(systemName: "quote.bubble")
                                 .resizable()
                                 .scaledToFit()
@@ -113,28 +113,39 @@ struct HomePage: View {
     }
     
     struct SavedQuotesView: View {
-        let savedQuotes: [QuoteGenerator]
-        
+        @ObservedObject var quoteVM: QuoteViewModel
+
         var body: some View {
-            VStack {
+            VStack(alignment: .center) {
                 Text("Saved Quotes")
-                    .font(.title)
-                    .padding()
-                
-                List(savedQuotes, id: \..id) { quote in
-                    Text(quote.quote ?? "Unknown Quote")
-                        .padding()
-                    
-                    HStack {
-                        Spacer()
-                        Text("Saved on: \(quote.dateSaved)")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .padding(.horizontal)
+                    .padding(.top)
+
+                List {
+                    ForEach(quoteVM.savedQuotes, id: \.id) { quote in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(quote.quote ?? "Unknown Quote")
+                                .font(.body)
+                                .padding(.vertical, 8)
+                            HStack {
+                              Spacer()
+                              Text("Saved on: \(quote.dateSaved)")
+                                  .font(.footnote)
+                                  .foregroundColor(.gray)
+                            }
+                        }
                     }
+                    .onDelete(perform: deleteQuote)
                 }
+                .listStyle(InsetGroupedListStyle())
             }
         }
-      
+          
+        func deleteQuote(at offsets: IndexSet) {
+            quoteVM.savedQuotes.remove(atOffsets: offsets)
+        }
     }
     
     struct SavedImagesView: View {

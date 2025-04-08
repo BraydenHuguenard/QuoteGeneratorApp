@@ -68,8 +68,9 @@ class QuoteViewModel: ObservableObject {
     }
     
     func saveQuote() {
-        quote.setdateSaved()
-        savedQuotes.append(quote)
+        if !savedQuotes.contains(where: { $0.quote == quote.quote }) {
+            savedQuotes.append(quote)
+        }
     }
     
    
