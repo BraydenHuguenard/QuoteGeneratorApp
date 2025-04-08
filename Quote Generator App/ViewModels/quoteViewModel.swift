@@ -68,6 +68,10 @@ class QuoteViewModel: ObservableObject {
     }
     
     func saveQuote() {
+        quote.setdateSaved()
         savedQuotes.append(quote)
     }
-}
+    
+   
+    }
+

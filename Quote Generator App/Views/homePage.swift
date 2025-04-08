@@ -4,6 +4,7 @@
 //
 //  Created by Brayden Huguenard on 3/7/25.
 //
+
 import SwiftUI
 
 struct HomePage: View {
@@ -123,9 +124,17 @@ struct HomePage: View {
                 List(savedQuotes, id: \..id) { quote in
                     Text(quote.quote ?? "Unknown Quote")
                         .padding()
+                    
+                    HStack {
+                        Spacer()
+                        Text("Saved on: \(quote.dateSaved)")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
                 }
             }
         }
+      
     }
     
     struct SavedImagesView: View {
@@ -144,5 +153,4 @@ struct HomePage: View {
             HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!", artist: "Author")))
         }
     }
-}
-
+} 
