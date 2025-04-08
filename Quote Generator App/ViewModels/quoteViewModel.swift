@@ -55,9 +55,9 @@ class QuoteViewModel: ObservableObject {
             if let data = data {
                 DispatchQueue.main.async {
                     self.quote = QuoteGenerator(quote: nil, artist: nil, imageData: data)
-                    self.currentQuote = "" // Optional
+                    self.currentQuote = ""
                     self.quoteHistory.append(self.quote)
-                    print("Image quote set!") // Debug: confirm this prints
+                    print("Image quote set!")
                 }
             } else {
                 DispatchQueue.main.async {

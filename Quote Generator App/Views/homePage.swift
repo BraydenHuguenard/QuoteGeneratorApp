@@ -74,7 +74,7 @@ struct HomePage: View {
                             .aspectRatio(contentMode: .fit)
                             .cornerRadius(12)
                             .padding()
-                            .frame(height: 250)
+                            .frame(height: 300)
                     } else if !quoteVM.currentQuote.isEmpty {
                         Text(quoteVM.currentQuote)
                             .font(.system(size: 24, weight: .medium, design: .rounded))

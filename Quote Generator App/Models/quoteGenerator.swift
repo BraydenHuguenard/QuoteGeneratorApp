@@ -23,9 +23,11 @@ struct QuoteGenerator: Identifiable {
         self.imageData = imageData
         self.dateSaved = "April 9, 2025"
     }
+    
     mutating func setdateSaved() {
         self.dateSaved = getFormattedDate( )
     }
+    
     func getFormattedDate()-> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy"
