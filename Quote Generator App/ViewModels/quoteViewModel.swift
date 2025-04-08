@@ -72,4 +72,7 @@ class QuoteViewModel: ObservableObject {
             savedQuotes.append(quote)
         }
     }
-}
+    
+   
+    }
+

@@ -12,11 +12,21 @@ struct QuoteGenerator: Identifiable {
     var quote: String?
     var artist: String?
     var image: String?
+    var dateSaved: String
     
     // Initializer to create a Quote
     init(quote: String? = nil, artist: String? = nil, image: String? = nil) {
         self.quote = quote
         self.artist = artist
         self.image = image
+        self.dateSaved = "April 8, 2025"
+    }
+    mutating func setdateSaved() {
+        self.dateSaved = getFormattedDate( )
+    }
+    func getFormattedDate()-> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy"
+        return formatter.string(from: Date())
     }
 }

@@ -4,6 +4,7 @@
 //
 //  Created by Brayden Huguenard on 3/7/25.
 //
+
 import SwiftUI
 
 struct HomePage: View {
@@ -128,6 +129,12 @@ struct HomePage: View {
                             Text(quote.quote ?? "Unknown Quote")
                                 .font(.body)
                                 .padding(.vertical, 8)
+                            HStack {
+                              Spacer()
+                              Text("Saved on: \(quote.dateSaved)")
+                                  .font(.footnote)
+                                  .foregroundColor(.gray)
+                            }
                         }
                     }
                     .onDelete(perform: deleteQuote)
@@ -135,7 +142,7 @@ struct HomePage: View {
                 .listStyle(InsetGroupedListStyle())
             }
         }
-
+          
         func deleteQuote(at offsets: IndexSet) {
             quoteVM.savedQuotes.remove(atOffsets: offsets)
         }
@@ -157,5 +164,4 @@ struct HomePage: View {
             HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!", artist: "Author")))
         }
     }
-}
-
+} 
