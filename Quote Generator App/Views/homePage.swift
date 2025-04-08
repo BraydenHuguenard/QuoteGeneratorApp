@@ -65,19 +65,29 @@ struct HomePage: View {
                     Spacer()
                     Spacer()
                         
-                    if quoteVM.currentQuote.isEmpty {
-                        Text("Click the button to get a quote!")
-                            .font(.system(size: 24, weight: .medium, design: .rounded))
+                    if let imageData = quoteVM.quote.imageData,
+                       !imageData.isEmpty,
+                       let uiImage = UIImage(data: imageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .cornerRadius(12)
                             .padding()
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    } else {
+                            .frame(height: 250)
+                    } else if !quoteVM.currentQuote.isEmpty {
                         Text(quoteVM.currentQuote)
                             .font(.system(size: 24, weight: .medium, design: .rounded))
                             .padding()
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity, alignment: .center)
+                    } else {
+                        Text("Click the button to get a quote!")
+                            .font(.system(size: 24, weight: .medium, design: .rounded))
+                            .padding()
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
+
                     
                     Spacer()
                     Spacer()
