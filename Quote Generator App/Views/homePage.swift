@@ -74,22 +74,21 @@ struct HomePage: View {
                             .aspectRatio(contentMode: .fit)
                             .cornerRadius(12)
                             .padding()
-                            .frame(height: 300)
+                            .frame(height: 325)
                     } else if !quoteVM.currentQuote.isEmpty {
                         Text(quoteVM.currentQuote)
                             .font(.system(size: 24, weight: .medium, design: .rounded))
                             .padding()
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 325)
                     } else {
                         Text("Click the button to get a quote!")
                             .font(.system(size: 24, weight: .medium, design: .rounded))
                             .padding()
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 325)
                     }
 
-                    
                     Spacer()
                     Spacer()
                     
@@ -115,6 +114,7 @@ struct HomePage: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     
+                    Spacer()
                     Spacer()
                 }
             }
