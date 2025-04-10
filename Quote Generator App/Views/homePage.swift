@@ -139,33 +139,56 @@ struct HomePage: View {
         @ObservedObject var quoteVM: QuoteViewModel
 
         var body: some View {
-            VStack(alignment: .center) {
+            VStack(alignment: .center, spacing: 16) {
                 Text("Saved Quotes")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .padding(.horizontal)
+                    .font(.largeTitle.bold())
                     .padding(.top)
 
-                List {
-                    ForEach(quoteVM.savedQuotes, id: \.id) { quote in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(quote.quote ?? "Unknown Quote")
-                                .font(.body)
-                                .padding(.vertical, 8)
-                            HStack {
-                              Spacer()
-                              Text("Saved on: \(quote.dateSaved)")
-                                  .font(.footnote)
-                                  .foregroundColor(.gray)
-                            }
-                        }
+                if quoteVM.savedQuotes.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "quote.bubble")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                            .foregroundColor(.gray.opacity(0.5))
+
+                        Text("No saved quotes yet.")
+                            .font(.headline)
+                            .foregroundColor(.gray)
                     }
-                    .onDelete(perform: deleteQuote)
+                    .padding(.top, 50)
+                } else {
+                    List {
+                        ForEach(quoteVM.savedQuotes, id: \.id) { quote in
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("“\(quote.quote ?? "Unknown Quote")”")
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+
+                                HStack {
+                                    Spacer()
+                                    Text("Saved on \(quote.dateSaved)")
+                                        .font(.footnote)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding()
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                        }
+                        .onDelete(perform: deleteQuote)
+                    }
+                    .listStyle(PlainListStyle())
                 }
-                .listStyle(InsetGroupedListStyle())
+
+                Spacer()
             }
+            .padding(.horizontal)
+            .background(Color(.systemGroupedBackground))
+            .edgesIgnoringSafeArea(.bottom)
         }
-          
+
         func deleteQuote(at offsets: IndexSet) {
             quoteVM.savedQuotes.remove(atOffsets: offsets)
         }
@@ -174,26 +197,35 @@ struct HomePage: View {
     struct SavedImagesView: View {
         @ObservedObject var quoteVM: QuoteViewModel
         @State private var currentIndex: Int = 0
-        
+
         var body: some View {
-            VStack {
+            VStack(spacing: 20) {
                 Text("Saved Images")
-                    .font(.title)
-                    .padding()
-                
-                Spacer()
-                
+                    .font(.largeTitle.bold())
+                    .padding(.top)
+
                 if quoteVM.savedImages.isEmpty {
-                    Text("No saved images.")
-                        .foregroundColor(.gray)
+                    VStack {
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(.gray.opacity(0.5))
+                        Text("No saved images.")
+                            .foregroundColor(.gray)
+                            .font(.headline)
+                    }
+                    .padding()
                 } else {
                     if let data = quoteVM.savedImages[currentIndex].imageData,
                        let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFit()
-                            .frame(maxHeight: 300)
-                            .padding()
+                            .frame(maxHeight: 325)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .shadow(radius: 10)
+                            .padding(.horizontal)
                     } else {
                         Text("Image could not be loaded.")
                             .foregroundColor(.red)
@@ -208,13 +240,16 @@ struct HomePage: View {
                         }) {
                             Image(systemName: "chevron.left.circle.fill")
                                 .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(currentIndex > 0 ? .blue : .gray)
+                                .frame(width: 45, height: 45)
+                                .foregroundColor(currentIndex > 0 ? .blue : .gray.opacity(0.5))
                         }
                         .disabled(currentIndex == 0)
-                        
-                        Spacer()
-                        
+
+                        Text("\(currentIndex + 1) of \(quoteVM.savedImages.count)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+
                         Button(action: {
                             if currentIndex < quoteVM.savedImages.count - 1 {
                                 currentIndex += 1
@@ -222,24 +257,45 @@ struct HomePage: View {
                         }) {
                             Image(systemName: "chevron.right.circle.fill")
                                 .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(currentIndex < quoteVM.savedImages.count - 1 ? .blue : .gray)
+                                .frame(width: 45, height: 45)
+                                .foregroundColor(currentIndex < quoteVM.savedImages.count - 1 ? .blue : .gray.opacity(0.5))
                         }
                         .disabled(currentIndex == quoteVM.savedImages.count - 1)
                     }
-                    .padding(.horizontal, 50)
                     .padding(.top)
+
+                    Button(action: deleteCurrentImage) {
+                        Image(systemName: "trash.circle.fill")
+                            .resizable()
+                            .frame(width: 45, height: 45)
+                            .foregroundColor(.red)
+                            .padding(.top, 10)
+                    }
                 }
-                
+
                 Spacer()
             }
             .padding()
+            .background(Color(.systemGroupedBackground))
+            .cornerRadius(20)
+            .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+            .padding()
+        }
+
+        func deleteCurrentImage() {
+            guard !quoteVM.savedImages.isEmpty else { return }
+
+            quoteVM.savedImages.remove(at: currentIndex)
+
+            if currentIndex >= quoteVM.savedImages.count {
+                currentIndex = max(0, quoteVM.savedImages.count - 1)
+            }
         }
     }
     
     struct HomePage_Previews: PreviewProvider {
         static var previews: some View {
-            HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!", artist: "Author")))
+            HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!")))
         }
     }
 } 

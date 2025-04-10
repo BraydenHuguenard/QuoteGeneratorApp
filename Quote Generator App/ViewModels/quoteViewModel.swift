@@ -33,7 +33,7 @@ class QuoteViewModel: ObservableObject {
                let author = result.first? ["a"] {
                 DispatchQueue.main.async {
                     self.currentQuote = firstQuote
-                    self.quote = QuoteGenerator(quote: firstQuote, artist: author)
+                    self.quote = QuoteGenerator(quote: firstQuote)
                     self.quoteHistory.append(self.quote)
                 }
             } else {
@@ -55,7 +55,7 @@ class QuoteViewModel: ObservableObject {
         URLSession.shared.dataTask(with: url) { data, _, _ in
             if let data = data {
                 DispatchQueue.main.async {
-                    self.quote = QuoteGenerator(quote: nil, artist: nil, imageData: data)
+                    self.quote = QuoteGenerator(quote: nil, imageData: data)
                     self.currentQuote = ""
                     self.quoteHistory.append(self.quote)
                     print("Image quote set!")

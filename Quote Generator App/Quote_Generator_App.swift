@@ -11,7 +11,7 @@ import SwiftUI
 struct Quote_Generator_App: App {
     var body: some Scene {
         WindowGroup {
-            HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!", artist: "Author")))
+            HomePage(quoteVM: QuoteViewModel(quote: QuoteGenerator(quote: "Hello, World!")))
         }
     }
 }
