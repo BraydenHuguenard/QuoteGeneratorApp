@@ -49,7 +49,19 @@ struct HomePage: View {
                         
                         Spacer()
                         
-                        Button(action: quoteVM.saveQuote) {
+                        Button(action: {
+                            if let imageData = quoteVM.quote.imageData, !imageData.isEmpty {
+                                // Save as image quote
+                                if !quoteVM.savedImages.contains(where: { $0.imageData == imageData }) {
+                                    var imageQuote = quoteVM.quote
+                                    imageQuote.setdateSaved()
+                                    quoteVM.savedImages.append(imageQuote)
+                                }
+                            } else {
+                                // Save as text quote
+                                quoteVM.saveQuote()
+                            }
+                        }) {
                             Image(systemName: "star.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -59,6 +71,7 @@ struct HomePage: View {
                                 .foregroundColor(.white)
                                 .shadow(radius: 5)
                         }
+
                     }
                     .padding(.horizontal)
                     .padding(.top, 10)
@@ -174,11 +187,19 @@ struct HomePage: View {
                     Text("No saved images.")
                         .foregroundColor(.gray)
                 } else {
-                    Image(quoteVM.savedImages[currentIndex].image!)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxHeight: 300)
-                        .padding()
+                    if let data = quoteVM.savedImages[currentIndex].imageData,
+                       let uiImage = UIImage(data: data) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 300)
+                            .padding()
+                    } else {
+                        Text("Image could not be loaded.")
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+
                     HStack {
                         Button(action: {
                             if currentIndex > 0 {
