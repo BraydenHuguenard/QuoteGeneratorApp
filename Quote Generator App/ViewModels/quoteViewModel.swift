@@ -11,6 +11,7 @@ class QuoteViewModel: ObservableObject {
     @Published var quote: QuoteGenerator
     @Published var currentQuote: String = ""
     @Published var savedQuotes: [QuoteGenerator] = []
+    @Published var savedImages: [QuoteGenerator] = []
     @Published var quoteHistory: [QuoteGenerator] = []
     
     init(quote: QuoteGenerator) {

@@ -25,7 +25,7 @@ struct HomePage: View {
                 
                 VStack {
                     HStack {
-                        NavigationLink(destination: SavedImagesView()) {
+                        NavigationLink(destination: SavedImagesView(quoteVM: quoteVM)) {
                             Image(systemName: "photo.on.rectangle")
                                 .resizable()
                                 .scaledToFit()
@@ -159,13 +159,62 @@ struct HomePage: View {
     }
     
     struct SavedImagesView: View {
+        @ObservedObject var quoteVM: QuoteViewModel
+        @State private var currentIndex: Int = 0
+        
         var body: some View {
             VStack {
                 Text("Saved Images")
                     .font(.title)
                     .padding()
+                
+                Spacer()
+                
+                if quoteVM.savedImages.isEmpty {
+                    Text("No saved images.")
+                        .foregroundColor(.gray)
+                } else {
+                    if quoteVM.savedImages[currentIndex].image != nil {
+                        Image(quoteVM.savedImages[currentIndex].image!)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 300)
+                            .padding()
+                        HStack {
+                            Button(action: {
+                                if currentIndex > 0 {
+                                    currentIndex -= 1
+                                }
+                            }) {
+                                Image(systemName: "chevron.left.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(currentIndex > 0 ? .blue : .gray)
+                            }
+                            .disabled(currentIndex == 0)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                if currentIndex < quoteVM.savedImages.count - 1 {
+                                    currentIndex += 1
+                                }
+                            }) {
+                                Image(systemName: "chevron.right.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(currentIndex < quoteVM.savedImages.count - 1 ? .blue : .gray)
+                            }
+                            .disabled(currentIndex == quoteVM.savedImages.count - 1)
+                        }
+                        .padding(.horizontal, 50)
+                        .padding(.top)
+                    }
+                }
+                
                 Spacer()
             }
+            .padding()
         }
     }
     
